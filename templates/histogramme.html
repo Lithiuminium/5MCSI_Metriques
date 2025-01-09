@@ -10,14 +10,14 @@
 
       function drawChart() {
         // Récupérer les données météo passées depuis Flask
-        const weatherData = JSON.parse('{{ results | tojson }}');
+        const weatherData = JSON.parse('{{ results | tojson }}').results; // Assurez-vous d'utiliser la bonne structure
 
         // Créer un tableau pour Google Charts
         const chartData = [["Time", "Temperature (°C)"]];
 
         weatherData.forEach((entry) => {
-          // Convertir le timestamp Unix en objet Date (en millisecondes)
-          const date = new Date(entry.time * 1000); // Convertir en millisecondes si c'est un timestamp Unix
+          // Convertir le timestamp Unix (en secondes) en objet Date (en millisecondes)
+          const date = new Date(entry.Jour * 1000); // Conversion du timestamp Unix en millisecondes
           chartData.push([date, entry.temp]);
         });
 
