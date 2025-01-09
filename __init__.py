@@ -18,15 +18,10 @@ def histogramme():
         json_content = json.loads(raw_content.decode('utf-8'))
         results = []
         for list_element in json_content.get('list', []):
-            dt_value = list_element.get('dt_txt')  # Utilisez dt_txt pour la date/heure
-            temp_kelvin = list_element.get('main', {}).get('temp')
-            if dt_value is not None and temp_kelvin is not None:
-                temp_celsius = temp_kelvin - 273.15  # Conversion de Kelvin en °C
-                results.append({'time': dt_value, 'temp': temp_celsius})
-        # Convertir la liste en JSON pour utilisation dans le script
-        return render_template('histogramme.html', results=json.dumps(results))
-    except Exception as e:
-        return jsonify({'error': str(e)})
+            dt_value = list_element.get('dt')  # Utilisez dt_txt pour la date/heure
+            temp_kelvin = list_element.get('main', {}).get('temp') - 273.15
+                results.append({'Jour': dt_value, 'temp': temp__kelvin})
+         return jsonify(results=results)
 
 @app.route('/tawarano/')
 def meteo():
@@ -36,7 +31,7 @@ def meteo():
     results = []
     for list_element in json_content.get('list', []):
         dt_value = list_element.get('dt')
-        temp_day_value = list_element.get('main', {}).get('temp') - 273.15 # Conversion de Kelvin en °c 
+        temp_day_value = list_element.get('main', {}).get('temp') - 273.15 # Conversion de Kelvin en °c
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
 
