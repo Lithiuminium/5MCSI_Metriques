@@ -8,37 +8,16 @@
 
       google.charts.setOnLoadCallback(drawChart);
 
-      async function getWeatherData() {
-        // API URL avec exemple (vous devrez remplacer "appid=xxx" par une clé valide)
-        const apiUrl = "https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx";
-
-        try {
-          const response = await fetch(apiUrl);
-          const data = await response.json();
-
-          // Extraire les températures en Kelvin et les convertir en Celsius
-          const temperatures = data.list.map((item) => {
-            return {
-              time: item.dt_txt,
-              tempCelsius: item.main.temp - 273.15, // Conversion K -> °C
-            };
-          });
-
-          return temperatures;
-        } catch (error) {
-          console.error("Erreur lors de la récupération des données météo :", error);
-          return [];
-        }
-      }
-
-      async function drawChart() {
-        // Récupérer les données météo
-        const weatherData = await getWeatherData();
+      function drawChart() {
+        // Récupérer les données météo passées depuis Flask
+        const weatherData = JSON.parse('{{ results | tojson }}');
 
         // Créer un tableau pour Google Charts
         const chartData = [["Time", "Temperature (°C)"]];
         weatherData.forEach((entry) => {
-          chartData.push([entry.time, entry.tempCelsius]);
+          // Convertir la chaîne de caractères de la date en objet Date
+          const date = new Date(entry.time);
+          chartData.push([date, entry.temp]);
         });
 
         // Charger les données dans Google Charts
