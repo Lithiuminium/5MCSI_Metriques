@@ -8,24 +8,31 @@
 
       function drawChart() {
         // Récupération des données passées par Flask
-        const weatherData = JSON.parse('{{ temperatures | tojson | safe }}');
+        const weatherData = JSON.parse('{{ results | tojson | safe }}');
 
         // Préparation des données pour Google Charts
-        const chartData = [["Time", "Temperature (°C)"]];
+        const chartData = [["Jour", "Température (\u00b0C)"]];
         weatherData.forEach((entry) => {
-          chartData.push([entry.time, entry.temp_celsius]);
+          const date = new Date(entry.Jour * 1000); // Conversion de l'epoch en date
+          const formattedDate = date.toLocaleDateString("fr-FR", {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          });
+          chartData.push([formattedDate, entry.temp]);
         });
 
         const data = google.visualization.arrayToDataTable(chartData);
 
         const options = {
-          title: "Prévisions des températures (°C)",
-          hAxis: { title: "Heure" },
-          vAxis: { title: "Température (°C)" },
+          title: "Températures par jour (\u00b0C)",
+          hAxis: { title: "Jour" },
+          vAxis: { title: "Température (\u00b0C)" },
           legend: { position: "none" },
+          bar: { groupWidth: "75%" },
         };
 
-        const chart = new google.visualization.LineChart(document.getElementById("chart_div"));
+        const chart = new google.visualization.ColumnChart(document.getElementById("chart_div"));
         chart.draw(data, options);
       }
     </script>
