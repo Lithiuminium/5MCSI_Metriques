@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route("/contact/")
 def MaPremiereAPI():
-    return "<h2>Ma page de contact</h2>"
+     return render_template("contact.html")
 
 @app.route('/histogramme/')
 def histogramme():
@@ -25,7 +25,7 @@ def histogramme():
             if dt_value is not None and temp_kelvin is not None:
                 temp_celsius = temp_kelvin - 273.15  # Conversion de Kelvin en °C
                 results.append({'Jour': dt_value, 'temp': temp_celsius})
-        return render_template('chart.html', results=results)
+        return render_template('histogramme.html', results=results)
     except Exception as e:
         return jsonify({'error': str(e)})
 
