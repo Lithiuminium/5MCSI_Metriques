@@ -13,22 +13,20 @@ def MaPremiereAPI():
 
 @app.route('/histogramme/')
 def histogramme():
-    try:
-       
         response = urlopen('https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx')
         raw_content = response.read()
         json_content = json.loads(raw_content.decode('utf-8'))
         results = []
         for list_element in json_content.get('list', []):
-            dt_value = list_element.get('dt') 
+            dt_value = list_element.get('dt_txt')  # Utilisez dt_txt pour la date/heure
             temp_kelvin = list_element.get('main', {}).get('temp')
             if dt_value is not None and temp_kelvin is not None:
                 temp_celsius = temp_kelvin - 273.15  # Conversion de Kelvin en °C
-                results.append({'Jour': dt_value, 'temp': temp_celsius})
-        return render_template('histogramme.html', results=results)
+                results.append({'time': dt_value, 'temp': temp_celsius})
+        # Convertir la liste en JSON pour utilisation dans le script
+        return render_template('histogramme.html', results=json.dumps(results))
     except Exception as e:
         return jsonify({'error': str(e)})
-
 
 @app.route('/tawarano/')
 def meteo():
