@@ -20,7 +20,7 @@ def histogramme():
         for list_element in json_content.get('list', []):
             dt_value = list_element.get('dt')  # Utilisez dt_txt pour la date/heure
             temp_kelvin = list_element.get('main', {}).get('temp') - 273.15
-                results.append({'Jour': dt_value, 'temp': temp__kelvin})
+            results.append({'Jour': dt_value, 'temp': temp__kelvin})
          return jsonify(results=results)
 
 @app.route('/tawarano/')
