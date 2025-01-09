@@ -12,20 +12,9 @@ def MaPremiereAPI():
     return render_template("contact.html")
 
 @app.route('/histogramme/')
-def histogramme():
-    try:
-        response = urlopen('https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx')
-        raw_content = response.read()
-        json_content = json.loads(raw_content.decode('utf-8'))
-        results = []
-        for list_element in json_content.get('list', []):
-            dt_value = list_element.get('dt')  # Utilisez dt_txt pour la date/heure
-            temp_kelvin = list_element.get('main', {}).get('temp') - 273.15  # Conversion de Kelvin à Celsius
-            results.append({'Jour': dt_value, 'temp': temp_kelvin})  # Correction de la variable ici
-        return jsonify(results=results)  # Correctement indenté à ce niveau
+def Histogramme():
+    return render_template("histogramme.html")
 
-    except Exception as e:
-        return jsonify({'error': f"Une erreur est survenue : {str(e)}"})
 
 @app.route('/tawarano/')
 def meteo():
