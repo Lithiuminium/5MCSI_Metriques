@@ -12,7 +12,7 @@ def MaPremiereAPI():
     return render_template("contact.html")
 
 @app.route('/histogramme/')
-def Histogramme():
+def histogramme():
     return render_template("histogramme.html")
 
 
