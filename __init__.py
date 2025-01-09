@@ -11,21 +11,18 @@ app = Flask(__name__)
 def MaPremiereAPI():
     return "<h2>Ma page de contact</h2>"
 
-@app.route("/graphique/")
-def graphique():
-    # URL de l'API (remplacez "xxx" par votre clé API valide)
-    api_url = "https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx"
-    response = requests.get(api_url)
-    weather_data = response.json()
+@app.route('/histogramme/')
+def histogramme():
+    response = urlopen('https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx')
+    raw_content = response.read()
+    json_content = json.loads(raw_content.decode('utf-8'))
+    results = []
+    for list_element in json_content.get('list', []):
+        dt_value = list_element.get('dt')  # Timestamp
+        temp_day_value = list_element.get('main', {}).get('temp') - 273.15  # Conversion de Kelvin en °C
+        results.append({'Jour': dt_value, 'temp': temp_day_value})
+    return render_template('chart.html', results=results)
 
-    # Extraire les températures en Celsius
-    temperatures = [
-        {"time": item["dt_txt"], "temp_celsius": item["main"]["temp"] - 273.15}
-        for item in weather_data["list"]
-    ]
-
-    # Passer les données au fichier HTML
-    return render_template("graphique.html", temperatures=temperatures)
 
 @app.route('/tawarano/')
 def meteo():
