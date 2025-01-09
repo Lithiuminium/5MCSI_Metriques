@@ -13,15 +13,21 @@ def MaPremiereAPI():
 
 @app.route('/histogramme/')
 def histogramme():
-    response = urlopen('https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx')
-    raw_content = response.read()
-    json_content = json.loads(raw_content.decode('utf-8'))
-    results = []
-    for list_element in json_content.get('list', []):
-        dt_value = list_element.get('dt')  # Timestamp
-        temp_day_value = list_element.get('main', {}).get('temp') - 273.15  # Conversion de Kelvin en °C
-        results.append({'Jour': dt_value, 'temp': temp_day_value})
-    return render_template('chart.html', results=results)
+    try:
+       
+        response = urlopen('https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx')
+        raw_content = response.read()
+        json_content = json.loads(raw_content.decode('utf-8'))
+        results = []
+        for list_element in json_content.get('list', []):
+            dt_value = list_element.get('dt') 
+            temp_kelvin = list_element.get('main', {}).get('temp')
+            if dt_value is not None and temp_kelvin is not None:
+                temp_celsius = temp_kelvin - 273.15  # Conversion de Kelvin en °C
+                results.append({'Jour': dt_value, 'temp': temp_celsius})
+        return render_template('chart.html', results=results)
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/tawarano/')
