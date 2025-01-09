@@ -14,9 +14,10 @@
 
         // Créer un tableau pour Google Charts
         const chartData = [["Time", "Temperature (°C)"]];
+
         weatherData.forEach((entry) => {
-          // Convertir la chaîne de caractères de la date en objet Date
-          const date = new Date(entry.time);
+          // Convertir le timestamp Unix en objet Date (en millisecondes)
+          const date = new Date(entry.time * 1000); // Convertir en millisecondes si c'est un timestamp Unix
           chartData.push([date, entry.temp]);
         });
 
@@ -36,6 +37,7 @@
     </script>
   </head>
   <body>
+    <h1>Graphique des Températures</h1>
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
   </body>
 </html>
